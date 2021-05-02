@@ -202,7 +202,7 @@ class ZoneService extends DomainrobotService
             $data = $body->toArray();
         }
         return new DomainrobotPromise($this->sendRequest(
-            $this->domainrobotConfig->getUrl() . "/zone/_search",
+            $this->domainrobotConfig->getUrl() . "/zone/_search" . $body->keysToString(),
             'POST',
             ["json" => $data]
         ));

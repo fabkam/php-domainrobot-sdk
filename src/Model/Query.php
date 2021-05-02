@@ -59,7 +59,8 @@ class Query implements ModelInterface, ArrayAccess
     protected static $swaggerTypes = [
         'filters' => '\Domainrobot\Model\QueryFilter[]',
         'view' => '\Domainrobot\Model\QueryView',
-        'orders' => '\Domainrobot\Model\QueryOrder[]'
+        'orders' => '\Domainrobot\Model\QueryOrder[]',
+        'keys' => 'string',
     ];
 
     /**
@@ -70,7 +71,8 @@ class Query implements ModelInterface, ArrayAccess
     protected static $swaggerFormats = [
         'filters' => null,
         'view' => null,
-        'orders' => null
+        'orders' => null,
+        'keys' => null,
     ];
 
     /**
@@ -102,7 +104,8 @@ class Query implements ModelInterface, ArrayAccess
     protected static $attributeMap = [
         'filters' => 'filters',
         'view' => 'view',
-        'orders' => 'orders'
+        'orders' => 'orders',
+        'keys' => 'keys',
     ];
 
     /**
@@ -113,7 +116,8 @@ class Query implements ModelInterface, ArrayAccess
     protected static $setters = [
         'filters' => 'setFilters',
         'view' => 'setView',
-        'orders' => 'setOrders'
+        'orders' => 'setOrders',
+        'keys' => 'setKeys',
     ];
 
     /**
@@ -124,7 +128,8 @@ class Query implements ModelInterface, ArrayAccess
     protected static $getters = [
         'filters' => 'getFilters',
         'view' => 'getView',
-        'orders' => 'getOrders'
+        'orders' => 'getOrders',
+        'keys' => 'getKeys',
     ];
 
     /**
@@ -190,6 +195,7 @@ class Query implements ModelInterface, ArrayAccess
         $this->container['filters'] = isset($data['filters']) ? $this->createData($data['filters'], 'filters')  : null;
         $this->container['view'] = isset($data['view']) ? $this->createData($data['view'], 'view')  : null;
         $this->container['orders'] = isset($data['orders']) ? $this->createData($data['orders'], 'orders')  : null;
+        $this->container['keys'] = $data['keys'] ?? null;
     }
 
     /**
@@ -317,6 +323,52 @@ class Query implements ModelInterface, ArrayAccess
         $this->container['view'] = $view;
 
         return $this;
+    }
+
+    /**
+     * Gets Query-Keys
+     *
+     * @return array
+     */
+    public function getKeys(): array
+    {
+        return $this->container['keys'] ?? [];
+    }
+
+    /**
+     * Sets Query-Keys
+     *
+     * @param string[] $keys
+     *
+     * @return Query
+     */
+    public function setKeys(array $keys): Query
+    {
+        $this->container['keys'] = $keys;
+
+        return $this;
+    }
+
+    /**
+     * Sets Query-Keys
+     *
+     * @param string[] $keys
+     *
+     * @return Query
+     */
+    public function keysToString(): string
+    {
+        if ( empty($this->getKeys()) )
+            return '';
+
+        $result = '';
+        foreach ($this->getKeys() as $key) {
+            $result .= '&keys=' . $key;
+        }
+        // remove first amp;
+        $result = substr($result, 1);
+
+        return '?' . $result;
     }
 
     /**
